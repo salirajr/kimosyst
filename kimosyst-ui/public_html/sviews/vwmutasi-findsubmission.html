@@ -1,0 +1,72 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+
+        <form role="form" class="form-inline pull-right m-t-lg">
+            <div class="input-group" ng-hide="data.refId">
+                <span class="input-group-addon ">File</span>
+                <input type="text" ng-model="data.amount"  placeholder="*" style="width: 220px;"
+                       class="form-control rightalign" />
+            </div>
+
+            <div class="input-group" ng-hide="data.refId">
+                <input type="text" readonly="true" ng-value="'TGL-INPUT'" style="width: 100px;"
+                       class="form-control rightalign" />
+            </div>
+            <div class="form-group"  ng-hide="data.refId">
+                <input type="datetime" class="form-control rightalign" date-time ng-model="data.dateFrom" readonly="true" style="background-color:  white; width: 150px;" view="date" auto-close="true" min-view="hours" format="YYYY-MM-DD HH:mm" />
+            </div>
+            <div class="form-group" ng-hide="data.refId">
+                <input type="datetime" class="form-control rightalign" date-time ng-model="data.dateTo" readonly="true" style="background-color:  white;  width: 150px;" view="date" auto-close="true" min-view="hours" format="YYYY-MM-DD HH:mm" />
+            </div>
+
+
+
+            <div class="input-group">
+                <span class="input-group-addon bg-muted">ID</span>
+                <input type="text" ng-model="data.refId"  placeholder="*" style="width: 90px;"
+                       class="form-control rightalign" />
+            </div>
+
+            <button class="btn btn-warning btn-outline" ng-click="resetVwRqParam()"><i class="fa fa-eraser"></i></button>
+            <button class="btn btn-primary" ng-click="retrieveVWMutasiSubmission()"><i class="fa fa-search"></i></button>
+            <button class="btn btn-default" ng-click="goToDetail()" ng-hide="data.checkedId === -1 || data.checkedId === undefined"><i class="fa fa-folder-open"></i></button>
+        </form>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row" ng-show="vw.mutasiSubmission && vw.mutasiSubmission.length > 0">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+
+                    <h2>
+                        Submission Mutasi [{{vw.mutasiSubmission.length}}]Rows
+                    </h2>
+
+                    <div  style="font-size: 85%;">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Source-Name</th>
+
+                                    <th class="text-right">REF-Id</th>
+                                    <th class="text-right"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="submission in vw.mutasiSubmission">
+                                    <td class="text-navy  text-left">{{submission.systDate|date:main.formatTDate}} | {{submission.fileSrc}}</td>
+
+                                    <td class="text-right">{{submission.id}}</td>
+                                    <td class="text-right" style="width: 10px;" > <input icheck type="radio" name="lsSubmission" ng-value="submission.id" ng-model="checkedId" ng-change="selectMutasiSubmission(submission.id)"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

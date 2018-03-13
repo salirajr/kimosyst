@@ -1,0 +1,64 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-5">
+        <h2>Track and Trace</h2>
+        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+            <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+            <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
+            <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+            <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Submit</a>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <h2>Track and Trace</h2>
+        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+            <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+            <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
+            <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+            <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Submit</a>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center">
+
+                    <h2>
+                        <i class="fa fa-expand"> </i> Resize the window to see how behaves responsive video.
+                    </h2>
+                    <small>Just put video on <code>figure responsible-video</code> element. Directive will do the rest. </small>
+                    <div  style="font-size: 85%;">
+                        <div class="row show-grid" style=" font-weight: bold;">
+                            <div class="col-md-4">CORRELATION</div>
+                            <div class="col-md-4">NOTIF</div>
+                            <div class="col-md-2">LINK</div>
+                            <div class="col-md-2">REQUEST SOURCE</div>
+                        </div>
+                        <hr/>
+
+
+                        <div class="row show-grid" ng-repeat="tsub in lsubmission">
+                            <div class="_row">
+                                <div class="_main">
+                                    <div class="col-md-4">{{tsub.typeRef}}-{{tsub.invoiceRef}}-[Rp. {{tsub.nominal|number}}]-[{{tsub.tdate}}]</div>
+                                    <div class="col-md-4">{{tsub.reason}} [{{tsub.note}}]</div>
+                                    <div class="col-md-2">[{{tsub.transferTo}}] {{tsub.transferName}}</div>
+                                    <div class="col-md-2">{{tsub.division}}-{{tsub.requestedBy}}</div>
+                                </div>
+                                <div class="_result">
+                                    <div class="row show-grid" ng-repeat="lresult in tsub.lresult"></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

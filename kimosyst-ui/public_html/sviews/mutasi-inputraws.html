@@ -1,0 +1,60 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h1></h1>
+        <div>Add new <code>.csv</code> file</div>
+        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+            <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+            <span class="input-group-addon btn btn-default btn-file" ng-disabled="state.onSavingProcess" >
+                <span class="fileinput-new"><i class="fa fa-search"></i></span>
+                <span class="fileinput-exists"><i class="fa fa-edit"></i></span>
+                <input type="file" accept=".csv" onchange="angular.element(this).scope().uploadFile(this.files)" name="files" ng-disabled="state.onSavingProcess">
+            </span>
+            <a ng-click="submit()" class="input-group-addon btn btn-default fileinput-exists"  ng-hide="state.saved" ng-disabled="state.onSavingProcess" ><i class="fa fa-save"></i></a>
+            <a ng-href="{{data.submission.accessfile}}" class="input-group-addon btn btn-default fileinput-exists"   ng-show="state.saved" ><i class="fa fa-download"></i></a>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight" ng-show="state.errMsg || temp.lmutasi.content.length">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+
+                    <h2>
+                        Bank Mandiri - Mutasi content generators
+                    </h2>
+                    <small class="m-b-sm">.csv content reader for admin's touch-point for record purifier. </small>
+                    <div class="alert alert-danger m-none p-xxs" ng-show="state.errMsg">{{state.errMsg}}</div>
+                    <ul ng-show="temp.lmutasi.content.length" class="tag-list" style=" padding: 0; margin-top: 20px;">
+                        <li ng-repeat="(key, value) in temp.lmutasi.headers"><a href="">{{key + '=' + value}}</a></li>
+                        <li><a href="" class="bg-info">{{'Records=' + temp.lmutasi.content.length}}</a></li>
+
+                    </ul>
+
+                    <div class="m-t-md" style="font-size: 85%; ">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-right">Tanggal</th>
+                                    <th class="text-right">Debet</th>
+                                    <th class="text-right">Kredit</th>
+                                    <th>Keterangan Transaksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="mutasi in temp.lmutasi.content">
+                                    <td class="text-right">{{mutasi.Tanggal}}</td>
+                                    <td class="text-danger text-right">{{mutasi.Debet}}</td>
+                                    <td class="text-navy  text-right">{{mutasi.Kredit}}</td>
+                                    <td>{{mutasi.KeteranganTransaksi}}<span ng-class="renderStatusLabel(mutasi.status)">{{mutasi.status}}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

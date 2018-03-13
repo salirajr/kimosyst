@@ -1,0 +1,63 @@
+<toaster-container toaster-options="{'time-out': 3000, 'position-class': 'toast-bottom-right','close-button':true}"></toaster-container>
+<div class="row border-bottom white-bg">
+    <nav class="navbar navbar-static-top" role="navigation">
+        <div class="navbar-header">
+            <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                <i class="fa fa-reorder"></i>
+            </button>
+
+            <a href="#" class="navbar-brand">Kim<i class="fa fa-github"></i>syst</a>
+
+        </div>
+        <div class="navbar-collapse collapse " id="navbar">
+            <ul class="nav navbar-nav">
+                <li uib-dropdown>
+                    <a href uib-dropdown-toggle> Mutasi <span class="caret"></span></a>
+                    <ul role="menu" uib-dropdown-menu>
+                        <li><a href="/#/mutasi/inputraws">Submit Mutasi Bank(.csv)</a></li>
+                        <li><a href="/#/mutasi/inputincome">Input pemasukan</a></li>
+
+                    </ul>
+                </li>
+                <li uib-dropdown>
+                    <a href uib-dropdown-toggle> Laporan <span class="caret"></span></a>
+                    <ul role="menu" uib-dropdown-menu>
+                        <li><a href="/#/vwmutasi/findsubmission">Pencarian Submisison Mutasi</a></li>
+                        <li><a href="/#/vwincome/findall">Pencarian Income ter-verifikasi</a></li>
+                        <li><a href="/#/vwmutasi/incomecompliance">Pencarian ter-konsolidasi</a></li>
+                    </ul>
+                </li>
+                <li uib-dropdown>
+                    <a href uib-dropdown-toggle> Refernsi <span class="caret"></span></a>
+                    <ul role="menu" uib-dropdown-menu>
+                        <li><a href="/#/rfrc/data">Referensi Data</a></li>
+                        <li><a href="/#/rfrc/xpression">XPression Orchestration</a></li>
+                        <li ng-show="activeUser.uName === 'ksysadm'"><a href="/#/rfrc/syst">Configurasi System</a></li>
+                        <li><a href="#">Menu item</a></li>
+                        <li><a href="#">Menu item</a></li>
+                    </ul>
+                </li>
+                <!-- <li uib-dropdown>
+                    <a href uib-dropdown-toggle> Menu item <span class="caret"></span></a>
+                    <ul role="menu" uib-dropdown-menu>
+                        <li><a href="#">Menu item</a></li>
+                        <li><a href="#">Menu item</a></li>
+                        <li><a href="#">Menu item</a></li>
+                        <li><a href="#">Menu item</a></li>
+                    </ul>
+                </li>-->
+
+
+
+            </ul>
+            <ul class="nav navbar-top-links navbar-right ">
+                <li uib-dropdown>
+                    <a href uib-dropdown-toggle> <i class="fa fa-user"></i></a>
+                    <ul role="menu" uib-dropdown-menu>
+                        <li ><a ng-click="logout()">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

@@ -1,0 +1,18 @@
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12 b-l"><h3 class="m-t-none m-b">Hello {{ activeUser.uName}}</h3>
+
+            <p>Please provide your authorization detail.</p>
+
+            <form role="form">
+                <div class="form-group"><!-- <label>Username</label> --><input type="password" placeholder="Password" ng-model="password" class="form-control"></div>
+                <div class="form-group"><input type="text" placeholder="Access Key" ng-model="actkey" class="form-control"></div>
+                <div>
+                    <button class="btn btn-sm btn-primary pull-right m-t-n-xs m-l-sm" ng-click="ok()" ng-disabled="actionLock"><strong>ReAuth!</strong></button>
+                    <button class="btn btn-sm btn-danger pull-right m-t-n-xs" ng-click="cancel()" ng-disabled="actionLock"><i class="fa fa-angle-double-left"></i></button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

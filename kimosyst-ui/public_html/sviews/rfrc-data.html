@@ -1,0 +1,82 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-5 b-r"><h4></h4>
+
+                            <p>Input / Perubahan / Pencarian Referensi</p>
+
+                            <form role="form">
+                                <div class="form-group"><label>Jenis Referensi</label> <ui-select ng-model="refInput.selected" ng-change="getRef()"  theme="bootstrap" ng-disabled="state.isOnHunt">
+                                        <ui-select-match placeholder="any">{{$select.selected.rvalue}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lsRefInput | filter: $select.search">
+                                            <div ng-bind-html="item.rvalue | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select></div>
+                                <div class="form-group"><label>Key</label> <input type="text"
+                                                                                   class="form-control" ng-model="data.refName"></div>
+                                <div class="form-group"><label>Identifier</label> <input type="text"
+                                                                                    class="form-control" ng-model="data.refValue"></div>
+
+                                
+                                <div>
+
+                                    <button class="btn btn-primary btn-outline" ng-click="getRef(true)"><i class="fa fa-search"></i></button>
+                                    <button class="btn btn-danger btn-outline"  ng-click="doDelete()"><i class="fa fa-trash"></i></button>
+                                    <button class="btn btn-default btn-outline" ng-click="doResetForm()"><i class="fa fa-refresh"></i></button>
+                                    <button class="btn btn-warning btn-outline"  ng-click="doSave()"><i class="fa fa-save"></i></button>
+                                     <button class="btn btn-warning btn-outline"  ng-click="doSync()"><i class="fa fa-spinner"></i></button>
+                                </div>
+                                <div class="alert alert-danger" ng-hide="state.refValidity">
+                                    <ul class="margin-bottom-none padding-left-lg">
+                                        <li>Nama tidak dapat terisi kosong.</li>
+                                        <li>Gunakan huruf kapital pada nama refernsi</li>
+                                        <li>Jenis Referensi harus terisi</li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-7"><h4></h4>
+
+                            <p>Referensi Terdaftar </p>
+
+                            <div  style="font-size: 85%;">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left"></th>
+                                            <th class="text-left">Key</th>
+                                            <th class="text-right">Identifier</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="dref in lsRef">
+                                            <td class="text-right" style="width: 10px;" > <input icheck type="radio" name="lsRefenerz" ng-value="$index" ng-model="data.checkedIndexRefernz" ng-change="selectRef($index)"></td>
+                                            <td class="text-left">{{dref.rname}}</td>
+                                            <td class="text-right">{{main.NVL(dref.rvalue,'No Identifier Required')}}</td>
+
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+

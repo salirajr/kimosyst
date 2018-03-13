@@ -1,0 +1,1 @@
+java -jar kimosyst-1.0.jar -classpath %classpath com.sjr.kimosyst.Application --spring.profiles.active=dev01

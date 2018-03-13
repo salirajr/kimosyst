@@ -1,0 +1,214 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-2 b-r"><h4></h4>
+
+                            <p>Input / Perubahan / Pencarian Referensi</p>
+
+                            <form role="form">
+                                <div class="form-group"><label>Bank</label> <ui-select ng-model="refBank.selected" ng-change="getXprsn()"  theme="bootstrap" ng-disabled="state.isOnCalcWeight">
+                                        <ui-select-match placeholder="any">{{$select.selected.rname}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lsRefBank | filter: $select.search">
+                                            <div ng-bind-html="item.rname | highlight: $select.search"></div>
+                                            <!-- <small ng-bind-html="item.rvalue | highlight: $select.search"></small> -->
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="form-group"><label>Bukti Transfer</label> <ui-select ng-model="refSlipType.selected" ng-change="getXprsn()"  theme="bootstrap" ng-disabled="state.isOnCalcWeight">
+                                        <ui-select-match placeholder="any">{{$select.selected.rname}}</ui-select-match>
+                                        <ui-select-choices repeat="item in lsSlipType | filter: $select.search">
+                                            <div ng-bind-html="item.rname | highlight: $select.search"></div>
+                                            <!-- <small ng-bind-html="item.rvalue | highlight: $select.search"></small> -->
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="m-t-lg pull-right m-l-lg">
+                                    <button class="btn btn-default btn-outline" ng-disabled="state.isOnCalcWeight" ng-click="getXprsn()"><i class="fa fa-refresh"></i></button>
+                                    <button class="btn btn-default btn-outline" ng-disabled="state.isOnCalcWeight" ng-click="saveExprs()"><i class="fa fa-save"></i></button>
+                                    <button class="btn btn-default btn-outline" ng-show="state.isOnCalcWeight" ng-click="calcExprn()" ><i class="fa fa-calculator"></i></button>
+                                </div>
+
+                                <div class="m-t-lg pull-right">
+
+                                    <input type="checkbox" class="js-switch pull-right" ui-switch="{color:'#ED5565'}" ng-model="state.isOnCalcWeight" />
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-7 b-r"><h4></h4>
+                            <p ng-show="state.isOnCalcWeight">Memo </p>
+                            <div ng-show="state.isOnCalcWeight" class=" form-group">
+
+                                <div class="input-group " >
+                                    <span class="input-group-addon btn" ng-click="getXprsnTestData('[' + refBank.selected.rname + '][' + refSlipType.selected.rname + ']')">
+                                        <i class="fa fa-pencil"> </i>
+                                    </span>
+                                    <textarea class="form-control" style="font-size: 90%; background-color:  white;" ng-model="data.memoEg.rvalue" ></textarea>
+                                    <span class="input-group-addon btn" ng-click="saveXprsnTestData()">
+                                        <i class="fa fa-database"> </i>
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <p>Referensi Terdaftar </p>
+
+
+                            <div  style="font-size: 85%;">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left">#</th>
+
+                                            <th class="text-right">XPrsn</th>
+                                            <th class="text-left">K</th>
+                                            <th class="text-right">W</th>
+                                            <th class="text-left"><i class="fa fa-quote-left"> </i></th>
+                                            <th class="text-right"><span  ng-show="state.isOnCalcWeight"><i class="fa fa-tag"> </i></span></th>
+                                            <th class="text-left"><span  ng-show="state.isOnCalcWeight">K.A</span></th>
+                                            <th class="text-left"></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="xpr in lsXprsn">
+                                            <td class="text-right"  style="width: 10px;">{{xpr.i}}</td>
+                                            <td class="text-right">{{xpr.xpress}}</td>
+                                            <td class="text-left">{{xpr.keyV}}</td>
+                                            <td class="text-right" style="width: 10px;">{{xpr.weight}}</td>
+                                            <td class="text-left">{{xpr.memo}}</td>
+                                            <td class="text-right"><span  >{{ xpr.tag}}</span></td>
+                                            <td class="text-left"><span  ng-show="state.isOnCalcWeight">{{xpr.keyVeg}}</span></td>
+                                            <td class="text-left"><input class="pull-right" icheck type="radio" name="lsRefenerz" ng-value="$index" ng-model="data.checkedIndexExprsn" ng-change="selectExpr($index)" > </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 b-l"><h4></h4>
+                            <div ng-hide="state.isOnCalcWeight">
+
+                                <p>Xpresion Evaluator </p>
+                                <div class="row">
+                                    <div class="col-md-8 form-group">
+
+                                        <div class="input-group date" ng-disabled="state.isOnCalcWeight">
+                                            <span class="input-group-addon  bg-muted"><i class="fa "> K </i></span>
+                                            <input type="text" class="form-control" ng-model="data.keyV" ng-disabled="state.isOnCalcWeight" style="background-color: white;">
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4 form-group">
+
+                                        <div class="input-group " ng-disabled="state.isOnCalcWeight">
+
+                                            <input type="text" class="form-control text-right" ng-model="data.weight" ng-disabled="state.isOnCalcWeight" style="background-color: white;">
+                                            <span class="input-group-addon  bg-muted">
+                                                <i class="fa "> W </i>
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-12 form-group">
+
+                                        <div class="input-group "  ng-disabled="state.isOnCalcWeight">
+                                            <span class="input-group-addon bg-muted">
+                                                <i class="fa">XPrsn </i>
+                                            </span>
+                                            <textarea class="form-control" style="font-size: 90%; background-color:  white;" ng-model="data.xpress" ng-disabled="state.isOnCalcWeight"></textarea>
+                                            <a class="input-group-addon btn" ng-click="validateExpr()">
+                                                <i class="fa fa-check"> </i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-8 form-group">
+
+                                        <div class="input-group " ng-disabled="state.isOnCalcWeight">
+                                            <span class="input-group-addon bg-muted">
+                                                <i class="fa fa-quote-left"> </i>
+                                            </span>
+                                            <textarea class="form-control" style="font-size: 90%; background-color:  white;" ng-model="data.memo" rows="4" ng-disabled="state.isOnCalcWeight"></textarea>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4 form-group pull-right">
+
+                                        <div class="input-group "  ng-disabled="state.isOnCalcWeight">
+
+                                            <input type="text" class="form-control text-right" ng-model="data.i" ng-disabled="state.isOnCalcWeight" style="background-color: white;">
+                                            <span class="input-group-addon bg-muted">
+                                                <i class="fa"> # </i>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 has-error " ng-hide="errMsg.xpr === ''" >
+                                        <div class="input-group " >
+                                            <span class="input-group-addon btn">
+                                                <i class="fa fa-bomb"> </i>
+                                            </span>
+                                            <textarea class="form-control" style="color: tomato; font-size: 90%; background-color:  white;" readonly>{{errMsg.xpr}}</textarea>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="m-t-lg pull-right">
+                                    <button class="btn btn-warning btn-outline"  ng-click="addExpr()" ng-disabled="state.isOnCalcWeight"><i class="fa fa-plus"></i></button>
+                                    <button class="btn btn-default btn-outline" ng-click="resetForm()" ng-disabled="state.isOnCalcWeight"><i class="fa fa-refresh"></i></button>
+
+                                    <button class="btn btn-primary btn-outline" ng-click="deleteExpr()" ng-disabled="state.isOnCalcWeight"><i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div  ng-show="state.isOnCalcWeight">
+                                <p class="text-"> K.A </p>
+                                <div class="row m-b-sm">
+                                    <div class="col-md-12 form-group">
+
+                                        <div class="input-group date" >
+                                            <span class="input-group-addon"><i class="fa">{{main.NVL(data.keyV, 'e.g.')}}</i></span>
+                                            <input type="text" class="form-control text-right" ng-model="data.keyVeg" ng-disabled="!state.isOnCalcWeight" style="background-color: white;">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="m-t-n pull-right">                      
+                                    <button class="btn btn-default btn-outline" ng-disabled="data.keyVeg === ''"><i class="fa fa-database"></i></button>           
+                                    <button class="btn btn-primary btn-outline" ng-click="setKeyVeg()" ng-disabled="data.keyVeg === ''"><i class="fa fa-paperclip"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+

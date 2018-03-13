@@ -1,0 +1,96 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+
+        <form role="form" class="form-inline pull-right m-t-lg">
+            <div class="input-group" ng-hide="data.refId">
+                <span class="input-group-addon ">S#</span>
+                <input type="text" ng-model="data.submissionId" ng-readonly="data.locationSearchId"  placeholder="*" style="width: 100px;"
+                       class="form-control rightalign" />
+            </div>
+            <button ng-show="data.locationSearchId !== '' && data.locationSearchId !== undefined && !data.refId" class="btn btn-danger" ng-click="resetVwRqParam()"><i class="fa fa-trash"></i></button>
+
+            <div class="form-group " ng-hide="data.refId">
+                <ui-select ng-model="account.selected"  theme="bootstrap" >
+                    <ui-select-match >{{$select.selected.rvalue + '&#160&#160&#160&#160'}}</ui-select-match>
+                    <ui-select-choices repeat="item in lsAccount | filter: $select.search" >
+                        <div ng-bind-html="item.rname | highlight: $select.search"></div>
+                        <small ng-bind-html="item.rvalue | highlight: $select.search"></small>
+                    </ui-select-choices>
+                </ui-select>
+
+            </div>
+            <div class="input-group" ng-hide="data.refId">
+                <input type="text" readonly="true" ng-value="'TGL-INPUT'" style="width: 100px;"
+                       class="form-control rightalign" />
+            </div>
+            <div class="form-group"  ng-hide="data.refId">
+                <input type="datetime" class="form-control rightalign" date-time ng-model="data.dateFrom" readonly="true" style="background-color:  white; width: 150px;" view="date" auto-close="true" min-view="hours" format="YYYY-MM-DD HH:mm" />
+            </div>
+            <div class="form-group" ng-hide="data.refId">
+                <input type="datetime" class="form-control rightalign" date-time ng-model="data.dateTo" readonly="true" style="background-color:  white;  width: 150px;" view="date" auto-close="true" min-view="hours" format="YYYY-MM-DD HH:mm" />
+            </div>
+
+            <button ng-show="data.isChecked" class="btn btn-danger" ng-click="resetVwRqParam()"><i class="fa fa-trash"></i></button>
+            <button ng-show="data.isChecked" class="btn btn-info" ng-click="cancelCheck()"><i class="fa fa-times"></i></button>
+
+            <div class="input-group">
+                <span class="input-group-addon bg-muted">M#</span>
+                <input type="text" ng-model="data.refId" ng-readonly="data.isChecked" placeholder="*" style="width: 90px;"
+                       class="form-control rightalign" />
+            </div>
+
+            <button ng-hide="data.refId" class="btn btn-warning btn-outline" ng-click="resetVwRqParam()"><i class="fa fa-eraser"></i></button>
+            <button ng-hide="data.refId" class="btn btn-primary" ng-click="retrieveVWMutasi()"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row" ng-show="vw.mutasi && vw.mutasi.length > 0">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+
+                    <h2>
+                        Submission Mutasi [{{vw.mutasi.length}}]Rows
+                    </h2>
+
+                    <div  style="font-size: 85%;">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-right">Tgl</th>
+                                    <th class="text-left">Account</th>
+                                    <th class="text-right">Kredit</th>
+                                    <th class="text-left">Bank Memo</th>
+                                    <th class="text-right">SysTime</th>
+                                    <th class="text-left">S#</th>
+                                    <th class="text-right">Stage</th>
+                                    <th class="text-left">I#</th>
+                                    <th class="text-right">M#</th>
+                                    <th class="text-right"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="dt in vw.mutasi">
+<td class="text-right">{{dt.mutasiTgl}}</td>
+                                    
+                                    <td class="text-left">{{dt.mutasiRekAccount}}</td>
+                                    <td class="text-right">{{dt.mutasiKredit}}</td>
+                                    <td class="text-left">{{dt.mutasiMemmo}}</td>
+                                    <td class="text-navy  text-left">{{dt.mutasiSystDate|date:main.formatTDate}}</td>
+                                    <td class="text-left">{{dt.mutasiSbssnId}}</td>
+                                    <td class="text-right">{{main.parseMutasiStage(dt.mutasiStage)}}</td>
+                                    <td class="text-left">{{main.NVL(dt.mutasiIncomeId, '~')}}</td>
+                                    <td class="text-right">{{dt.mutasiId}}</td>
+                                    <td class="text-right" style="width: 10px;" > <input icheck type="radio" name="lsSubmission" ng-value="dt.mutasiId" ng-model="checkedId" ng-change="selectMutasiSubmission(dt.mutasiId)"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

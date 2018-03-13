@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Mar 07 16:28:18 ICT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0161-ffca-3741-00001dc7f918 
+on database directory C:\Users\jovir\AppData\Roaming\NetBeans\Derby\dbkimo with class loader org.springframework.boot.loader.LaunchedURLClassLoader@38af3868 
+Loaded from jar:file:/E:/Branches/kampf/kimosyst/dist/kimosyst-1.0.jar!/BOOT-INF/lib/derby-10.12.1.1.jar!/
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_51-b16
+user.dir=E:\Branches\kampf\kimosyst\dist
+os.name=Windows 7
+os.arch=amd64
+os.version=6.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

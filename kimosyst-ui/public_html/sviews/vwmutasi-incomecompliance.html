@@ -1,0 +1,214 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+
+        <form role="form" class="form-inline pull-right m-t-lg">
+            <div class="input-group" ng-hide="data.refId">
+                <span class="input-group-addon ">Rp.</span>
+                <input type="text" ng-model="data.amount"  placeholder="*" style="width: 120px;"
+                       class="form-control rightalign" />
+            </div>
+
+            <div class="form-group " ng-hide="data.refId">
+
+                <ui-select ng-model="incomeType.selected"  theme="bootstrap" >
+                    <ui-select-match >{{$select.selected.rname + '&#160&#160&#160&#160'}}</ui-select-match>
+                    <ui-select-choices repeat="item in lsIncomeType | filter: $select.search" >
+                        <div ng-bind-html="item.rname | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="form-group " ng-hide="data.refId">
+
+                <ui-select ng-model="account.selected"  theme="bootstrap" >
+                    <ui-select-match >{{$select.selected.rvalue + '&#160&#160&#160&#160'}}</ui-select-match>
+                    <ui-select-choices repeat="item in lsAccount | filter: $select.search" >
+                        <div ng-bind-html="item.rname | highlight: $select.search"></div>
+                        <small ng-bind-html="item.rvalue | highlight: $select.search"></small>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="form-group " ng-hide="data.refId">
+
+                <ui-select ng-model="criteriaTgl.selected"  theme="bootstrap" >
+                    <ui-select-match >{{$select.selected.rname + '&#160&#160&#160&#160'}}</ui-select-match>
+                    <ui-select-choices repeat="item in lsCriteriaTgl | filter: $select.search" >
+                        <div ng-bind-html="item.rname | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="form-group"  ng-hide="data.refId">
+                <input type="datetime" class="form-control rightalign" date-time ng-model="data.dateFrom" readonly="true" style="background-color:  white; width: 150px;" view="date" auto-close="true" min-view="hours" format="YYYY-MM-DD HH:mm" />
+            </div>
+            <div class="form-group" ng-hide="data.refId">
+                <input type="datetime" class="form-control rightalign" date-time ng-model="data.dateTo" readonly="true" style="background-color:  white;  width: 150px;" view="date" auto-close="true" min-view="hours" format="YYYY-MM-DD HH:mm" />
+            </div>
+            <div class="form-group " ng-hide="data.refId">
+
+                <ui-select ng-model="bank.selected"  theme="bootstrap" >
+                    <ui-select-match>{{$select.selected.rname + '&#160&#160&#160&#160'}}</ui-select-match>
+                    <ui-select-choices repeat="item in lsBank | filter: $select.search" >
+                        <div ng-bind-html="item.rname | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="form-group " ng-hide="data.refId">
+
+                <ui-select ng-model="slipType.selected"  theme="bootstrap" >
+                    <ui-select-match >{{$select.selected.rname + '&#160&#160&#160&#160'}}</ui-select-match>
+                    <ui-select-choices repeat="item in lsSlipType | filter: $select.search" >
+                        <div ng-bind-html="item.rname | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-addon bg-muted">ID</span>
+                <input type="text" ng-model="data.refId"  placeholder="*" style="width: 100px;"
+                       class="form-control rightalign" />
+            </div>
+
+            <button class="btn btn-warning btn-outline" ng-click="resetVwRqParam()"><i class="fa fa-eraser"></i></button>
+            <button class="btn btn-primary" ng-click="retrieveVWMutasiCompliance()"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row" ng-show="vw.mutasiCompliance && vw.mutasiCompliance.length > 0">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+
+                    <h2>
+                        Compiled Mutasi [{{vw.mutasiCompliance.length}}]Rows
+                    </h2>
+
+                    <div  style="font-size: 85%;">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-right">Nominal</th>
+                                    <th class="text-left">Income-Type</th>
+                                    <th class="text-right">Tgl-Income</th>
+                                    <th class="text-left">Tgl-Mutasi</th>
+                                    <th class="text-right">Bank</th>
+                                    <th class="text-left">Bukti-Transfer</th>
+                                    <th class="text-right">NoRek-SCC</th>
+                                    <th class="text-left">Stage</th>
+                                    <th class="text-right">Tgl-Input</th>
+                                    <th class="text-left">Tgl-Verifikasi</th>
+                                    <th class="text-right">REF-Id</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="compliance in vw.mutasiCompliance">
+                                    <td class="text-navy  text-right">{{compliance.incomeNominal}}</td>
+                                    <td class="text-left">{{compliance.incomeType}}</td>
+                                    <td class="text-right">{{compliance.incomeTrxDate}}</td>
+                                    <td class="text-left">{{compliance.mutasiTgl}}</td>
+                                    <td class="text-danger text-right">{{compliance.incomeBank}}</td>
+                                    <td class="text-navy  text-left">{{compliance.incomeNoteType}}</td>
+                                    <td class="text-danger text-right">{{compliance.mutasiRekAccount}}</td>
+                                    <td class="text-navy  text-left">{{main.parseComplianceStage(compliance.complianceStage)}}</td>
+                                    <td class="text-right">{{compliance.incomeSystDate|date:main.formatTDate}}</td>
+                                    <td class="text-left">{{compliance.complianceSystDate|date:main.formatTDate}}</td>
+                                    <td class="text-warning  text-right">{{'C' + compliance.complianceId + '-I' + compliance.incomeId + '-M' + compliance.mutasiId + '-S' + compliance.sbssnRefId}}</td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-show="vw.income && vw.income.length > 0">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+
+                    <h2>
+                        UnVerified Income [{{vw.income.length}}]Rows
+                    </h2>
+                    <small ng-hide="true"> {{data.refId}}</small>
+                    <div  style="font-size: 85%;">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-right">Nominal</th>
+                                    <th class="text-left">Income-Type</th>
+                                    <th class="text-right">Tgl-Input</th>
+                                    <th class="text-left">Tgl-Income</th>
+                                    <th class="text-right">Bank</th>
+                                    <th class="text-left">Bukti-Transfer</th>
+                                    <th class="text-right">NoRek-SCC</th>
+                                    <th class="text-left">Stage</th>
+
+                                    <th class="text-right">Memo</th>
+                                    <th class="text-right">REF-Id</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="income in vw.income">
+                                    <td class="text-navy  text-right">{{income.incomeNominal}}</td>
+                                    <td class="text-left">{{income.incomeType}}</td>
+                                    <td class="text-right">{{income.incomeTrxDate + ' ' + income.incomeTrxTime}}</td>
+                                    <td class="text-left">{{income.incomeSystDate|date:formatTDate}}</td>
+                                    <td class="text-danger text-right">{{income.incomeBank}}</td>
+                                    <td class="text-navy  text-left">{{income.incomeNoteType}}</td>
+                                    <td class="text-danger text-right">{{income.incomeRekAccount}}</td>
+                                    <td class="text-navy  text-left">{{main.parseIncomeStage(income.incomeStage)}}</td>
+                                    <td class="text-right" >{{main.trimText(income.incomeMemo, 50)}}<a ng-show="main.islnTextOver(income.incomeMemo, 50)" popover-placement="left" uib-popover="{{income.incomeMemo}}" > ... </a></td>
+                                    <td class="text-warning text-right" >{{'I' + income.incomeId}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="vw.mutasi && vw.mutasi.length > 0">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+
+                    <h2>
+                        Unidentified Mutasi [{{vw.mutasi.length}}]Rows
+                    </h2>
+
+
+                    <div class="m-t-lg" style=" font-size: 85%;">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-right">Nominal</th>
+                                    <th class="text-right">Tgl-Mutasi</th>
+                                    <th class="text-left">Tgl-Submit</th>
+                                    <th class="text-right">NoRek-SCC</th>
+                                    <th class="text-left">Stage</th>
+                                    <th class="text-right">Memo</th>
+                                    <th class="text-right">REF-Id</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="mutasi in vw.mutasi">
+                                    <td class="text-navy  text-right">{{mutasi.mutasiKredit}}</td>
+                                    <td class="text-right">{{mutasi.mutasiTgl}}</td>
+                                    <td class="text-left">{{mutasi.mutasiSystDate|date:formatTDate}}</td>
+                                    <td class="text-danger text-right">{{mutasi.mutasiRekAccount}}</td>
+                                    <td class="text-navy  text-left">{{main.parseMutasiStage(mutasi.mutasiStage)}}</td>
+                                    <td class="text-right" >{{main.trimText(mutasi.mutasiMemmo, 130)}}<a ng-show="main.islnTextOver(mutasi.mutasiMemmo, 130)" popover-placement="left" uib-popover="{{mutasi.mutasiMemmo}}" > ... </a></td>
+                                    <td class="text-warning  text-right">{{'M' + mutasi.mutasiId + '-M' + mutasi.mutasiSbssnId + '-I' + main.NVL(mutasi.mutasiIncomeId, 0)}}</td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
