@@ -86,9 +86,4 @@ public class StringUtil {
         return URLEncoder.encode(q, "UTF-8");
     }
 
-    public static void main(String[] args) {
-        FileUtil.BASEDIR_IDTFR = "/";
-        System.out.println(FileUtil.getDir(DateUtil.getDToday(), MutasiSubmission.TABLE_NAME, "12" + ".json"));
-
-    }
 }

@@ -93,9 +93,5 @@ public class DateUtil {
         return a;
     }
 
-    public static void main(String[] args) throws ParseException {
-        System.out.println(getDToday());
-        
 
-    }
 }

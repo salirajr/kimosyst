@@ -125,7 +125,10 @@ public class IncomeService {
             }
             if (!ObjectUtil.isNull(sMutasiId)) {
                 result.get(i).put("imgMCPblcURI", ApiController.PREFIX_PUBLIC + "/undh/incomecmutasi/img?type=income&id=" + ecIncomeId + "&actkey=" + actkey);
+            }else{
+                result.get(i).put("imgMCPblcURI",result.get(i).get("imgPblcURI"));
             }
+            System.out.println(result.get(i));
 
         }
         return result;
