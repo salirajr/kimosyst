@@ -19,14 +19,14 @@ import javax.imageio.ImageIO;
  */
 public class PutImageAText {
 
-    public static void mains(String[] args) throws IOException {
-        File imgPath = new File("E:\\Branches\\kampf\\kimosyst\\BDIR\\income\\312017\\376.png");
+    public static void main(String[] args) throws IOException {
+        File imgPath = new File("/home/salirajr/Projects/kimosyst/BDIR/ut/00.png");
         BufferedImage image = ImageIO.read(imgPath);
 
-        File imgPath2 = new File("E:\\Branches\\kampf\\kimosyst\\rsrc\\logo8.png");
+        File imgPath2 = new File("/home/salirajr/Projects/kimosyst/kimosyst/src/main/resources/logo8.png");
         BufferedImage image2 = ImageIO.read(imgPath2);
         
-        File imgPath3 = new File("E:\\Branches\\kampf\\kimosyst\\rsrc\\void.png");
+        File imgPath3 = new File("/home/salirajr/Projects/kimosyst/kimosyst/src/main/resources/void.png");
         BufferedImage image3 = ImageIO.read(imgPath3);
 
         Graphics g = image.getGraphics();
@@ -43,10 +43,17 @@ public class PutImageAText {
         //g.drawImage(image2, 100, 100, null);
         //g.drawImage(image2, 170, 227, 160, 47, null);
         g.drawImage(image2, 0, 227, 500, 72, null);
+        ImageIO.write(image, "png", new File("/home/salirajr/Projects/kimosyst/BDIR/ut/00-paired.png"));
         g.drawImage(image3, 0, 297, 500, 22, null);
+        
+        
+        g.setColor(Color.RED);
+        g.setFont(g.getFont().deriveFont(16f));
+        g.drawString("#DELETED by JS @2017-10-08 12:55",
+                 10, 420);
 
         g.dispose();
-        ImageIO.write(image, "png", new File("C:\\Users\\jovir\\Desktop\\_temp\\image1.jpg"));
+        ImageIO.write(image, "png", new File("/home/salirajr/Projects/kimosyst/BDIR/ut/00-void.png"));
 
     }
 

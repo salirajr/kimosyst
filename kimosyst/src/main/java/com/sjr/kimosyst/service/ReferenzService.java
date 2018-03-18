@@ -58,6 +58,12 @@ public class ReferenzService {
         } catch (java.lang.NullPointerException npe) {
             logger.error("\"BASE_CONFIGURATION\", \"SYST_OWNER\", \"VERIFIED_SCHEME_SRC\" is null: ", npe);
         }
+        try {
+            IncomeComplianceMutasiService.VOID_SCHEME_SRC = repoRef.findByGruppeAndScopeAndRname("BASE_CONFIGURATION", "SYST_OWNER", "VOID_SCHEME_SRC").getRvalue();
+            logger.info("\"BASE_CONFIGURATION\", \"SYST_OWNER\", \"VOID_SCHEME_SRC\" [" + IncomeComplianceMutasiService.VOID_SCHEME_SRC + "] reloaded succesfully");
+        } catch (java.lang.NullPointerException npe) {
+            logger.error("\"BASE_CONFIGURATION\", \"SYST_OWNER\", \"VOID_SCHEME_SRC\" is null: ", npe);
+        }
 
     }
 }

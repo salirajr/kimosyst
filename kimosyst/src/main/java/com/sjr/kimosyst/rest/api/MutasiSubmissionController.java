@@ -53,10 +53,10 @@ public class MutasiSubmissionController {
         } catch (IOException ioe) {
             rsp = new Payload.BizzErrResponse(MutasiSubmission.TABLE_NAME, "Input / Output violated");
             rsp.body = ioe.getLocalizedMessage();
-            return new ResponseEntity(rsp, HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity(rsp, HttpStatus.BAD_GATEWAY);
         } catch (DataIntegrityViolationException dive) {
             rsp = new Payload.BizzErrResponse(MutasiSubmission.TABLE_NAME, "MUTASISUBMISSION_EXISTS", "File with the name is already saved!");
-            return new ResponseEntity(rsp, HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity(rsp, HttpStatus.CONFLICT);
         } catch (Exception e) {
             rsp = new Payload.SystErrResponse(MutasiSubmission.TABLE_NAME, e.getClass().toGenericString(), e.getCause().toString());
             rsp.body = e.getLocalizedMessage();

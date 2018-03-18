@@ -43,5 +43,7 @@ public interface IncomeComplianceMutasiRepository extends CrudRepository<IncomeC
             @Param("buktiTransfer") String buktiTransfer, @Param("amount") Double amount);
 
     IncomeComplianceMutasi findByIncomeId(Long incomeId);
+    
+    IncomeComplianceMutasi findByMutasiId(Long mutasiId);
 
 }

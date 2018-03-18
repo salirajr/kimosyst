@@ -5,6 +5,7 @@
  */
 package com.sjr.kimosyst.model;
 
+import com.sjr.kimosyst.util.DateUtil;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -28,18 +29,22 @@ import lombok.Data;
     @UniqueConstraint(columnNames = {"memo", "tgl", "kredit", "debit"})
 },
         indexes = {
-            @Index(name = Mutasi.TABLE_NAME + "_sbssnId", columnList = "sbssnId"),
-            @Index(name = Mutasi.TABLE_NAME + "_tgl", columnList = "tgl"),
-            @Index(name = Mutasi.TABLE_NAME + "_kredit", columnList = "kredit"),
-            @Index(name = Mutasi.TABLE_NAME + "_debit", columnList = "debit"),
-            @Index(name = Mutasi.TABLE_NAME + "_rekAccount", columnList = "rekAccount"),
-            @Index(name = Mutasi.TABLE_NAME + "_systDate", columnList = "systDate"),
+            @Index(name = Mutasi.TABLE_NAME + "_sbssnId", columnList = "sbssnId")
+            ,
+            @Index(name = Mutasi.TABLE_NAME + "_tgl", columnList = "tgl")
+            ,
+            @Index(name = Mutasi.TABLE_NAME + "_kredit", columnList = "kredit")
+            ,
+            @Index(name = Mutasi.TABLE_NAME + "_debit", columnList = "debit")
+            ,
+            @Index(name = Mutasi.TABLE_NAME + "_rekAccount", columnList = "rekAccount")
+            ,
+            @Index(name = Mutasi.TABLE_NAME + "_systDate", columnList = "systDate")
+            ,
             @Index(name = Mutasi.TABLE_NAME + "_incomeId", columnList = "incomeId")})
 public class Mutasi implements Serializable {
 
     public static final String TABLE_NAME = "mutasi";
-    
-    
 
     @Column(nullable = false)
     private Long sbssnId;
@@ -56,7 +61,7 @@ public class Mutasi implements Serializable {
 
     @Column(nullable = false)
     private double debit;
-    
+
     @Column(nullable = false, length = 1)
     private double stage;
 
@@ -73,8 +78,21 @@ public class Mutasi implements Serializable {
     @Column(nullable = false)
     private Timestamp systDate;
 
-    @Column(nullable = true)
+    private final int SYSTMEMO_LEN = 300;
+    @Column(nullable = true, length = SYSTMEMO_LEN)
     private String systMemo;
+
+    public void addSystMemo(String text) {
+        if (systMemo == null) {
+            this.systMemo = text;
+        } else {
+            this.systMemo += "|[" + DateUtil.getMemoTNow() + "]:" + text;
+
+            if (this.systMemo.length() > SYSTMEMO_LEN) {
+                this.systMemo = this.systMemo.substring(this.systMemo.length() - SYSTMEMO_LEN, this.systMemo.length());
+            }
+        }
+    }
 
     @Column(nullable = true)
     private Long incomeId;

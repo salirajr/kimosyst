@@ -71,7 +71,7 @@ public class MutasiController {
         rsp.body = mtsiService.repo().findOne(id);
         return rsp;
     }
-
+    
     @RequestMapping(value = "/file-access/{id}", method = RequestMethod.GET)
     public Payload.Response generate(@PathVariable("id") Long id, HttpServletResponse response)
             throws ServletException, IOException {

@@ -7,8 +7,12 @@ package com.sjr.kimosyst.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sjr.kimosyst.dao.MutasiRepository;
+import com.sjr.kimosyst.model.IncomeComplianceMutasi;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,4 +35,5 @@ public class MutasiService {
     public MutasiRepository repo() {
         return repoM;
     }
+    
 }

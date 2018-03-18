@@ -49,7 +49,7 @@ public class IncomeComplianceMutasi implements Serializable {
     @Column(nullable = false)
     private Timestamp systDate;
 
-    @Column(nullable = false, length = 1)
+    @Column(nullable = false)
     private double stage;
 
     //File Store Location

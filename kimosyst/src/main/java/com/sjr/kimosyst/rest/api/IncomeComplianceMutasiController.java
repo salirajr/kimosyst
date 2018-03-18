@@ -2,7 +2,9 @@ package com.sjr.kimosyst.rest.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sjr.kimosyst.model.IncomeComplianceMutasi;
+import com.sjr.kimosyst.model.MutasiSubmission;
 import com.sjr.kimosyst.rest.api.util.Payload;
+import com.sjr.kimosyst.security.JwtFilter;
 import com.sjr.kimosyst.service.IncomeComplianceMutasiService;
 import com.sjr.kimosyst.util.FileUtil;
 import com.sjr.kimosyst.util.ImageUtil;
@@ -10,10 +12,15 @@ import com.sjr.kimosyst.util.StringUtil;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,8 +86,7 @@ public class IncomeComplianceMutasiController {
                     rsp.body = incmCMtsiService.repo().retVwOnCreationWithAmount(start, end, incomeType, rekeningNo, bank, buktiTransfer, new Double(amount));
                     break;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NumberFormatException e) {
             rsp.body = new HashMap();
         }
 
@@ -115,6 +121,33 @@ public class IncomeComplianceMutasiController {
     public byte[] getImg(@PathVariable("id") Long id, HttpServletRequest request) throws IOException {
         IncomeComplianceMutasi icm = incmCMtsiService.repo().findOne(id);
         return ImageUtil.grabImgBytesArrays(FileUtil.getAbsDir(icm.getPrintFSL()));
+    }
+
+    @RequestMapping(value = "/uncomply/mutasi/{mutasiId}", method = RequestMethod.DELETE)
+    public ResponseEntity uncomply(@PathVariable("id") Long id,
+            @RequestParam(name = "memo", required = false) String memo,
+            HttpServletRequest request)
+            throws ServletException {
+        String actor = String.valueOf(request.getAttribute(JwtFilter.USER));
+        Payload.Response rsp = new Payload.Response(IncomeComplianceMutasi.TABLE_NAME, Payload.ResponseStatus._00);
+        IncomeComplianceMutasi icm = incmCMtsiService.repo().findByMutasiId(id);
+        Map map = incmCMtsiService.uncomply(icm, memo, actor);
+        if (((HttpStatus) map.get("code")) == HttpStatus.OK) {
+            try {
+                map = incmCMtsiService.uncomplyImg(icm.getId(), memo, actor);
+                
+                rsp.body = map;
+                return new ResponseEntity(rsp, HttpStatus.OK);
+            } catch (IOException ex) {
+                rsp = new Payload.BizzErrResponse(IncomeComplianceMutasi.TABLE_NAME, "Failed during rendering .image uncomply");
+                rsp.body = ex.getLocalizedMessage();
+                return new ResponseEntity(rsp, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            rsp.body = map;
+            return new ResponseEntity(rsp, (HttpStatus) map.get("code"));
+        }
+
     }
 
 }

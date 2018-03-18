@@ -31,7 +31,7 @@ public class JwtFilter implements Filter {
     //final String authHeader = "something-secret-you-cannot-keep-it";
 
     public static final String AUTHORIZATION = "Authorization", BEARER = "Bearer ",
-            CLAIMS = "claims";
+            CLAIMS = "claims", USER = "jwtUser";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

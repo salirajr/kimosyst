@@ -33,6 +33,7 @@ import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 /**
@@ -63,6 +64,7 @@ public class IncomeComplianceMutasiService {
     private final static String VERIFIER_DELIMITER = ", ";
     // E:\\Branches\\kampf\\kimosyst\\rsrc\\logo8.png
     public static String VERIFIED_SCHEME_SRC;
+    public static String VOID_SCHEME_SRC;
 
     public IncomeComplianceMutasiRepository repo() {
         return repoICM;
@@ -100,12 +102,12 @@ public class IncomeComplianceMutasiService {
                     }
                 } else {
                     rsp.put("msg", "Mutasi is not exist");
-                    rsp.put("code", "21");
+                    rsp.put("code", HttpStatus.NOT_FOUND);
                 }
             }
         } else {
             rsp.put("msg", "Income is not exist");
-            rsp.put("code", "10");
+            rsp.put("code", HttpStatus.NOT_FOUND);
         }
         return rsp;
     }
@@ -130,7 +132,7 @@ public class IncomeComplianceMutasiService {
             g.setColor(Color.YELLOW);
 
             int wrapLength = 70;
-            String[] temps = StringUtil.textWrap(wrapLength, StringUtil.concats(VERIFIER_DELIMITER, om.getId(), DateUtil.asMemo(om.getSystDate()), om.getRekAccount(), om.getDebit(), om.getKredit(), DateUtil.asMemo(om.getTgl()), om.getMemo()));
+            String[] temps = StringUtil.textWrap(wrapLength, StringUtil.concats(VERIFIER_DELIMITER, "#ICM=" + in + " #I=" + oi.getId() + " #M=" + om.getId() + " #S=" + om.getSbssnId(), DateUtil.asMemo(om.getSystDate()), om.getRekAccount(), om.getDebit(), om.getKredit(), DateUtil.asMemo(om.getTgl()), om.getMemo()));
 
             int x = 10, y = 20;
             for (String t : temps) {
@@ -158,7 +160,8 @@ public class IncomeComplianceMutasiService {
                 y += 20;
                 System.out.println("MAGENTA=" + t);
             }
-            g.setColor(Color.RED);
+            g.setFont(g.getFont().deriveFont(12f));
+            g.setColor(Color.ORANGE);
             g.drawString(StringUtil.concats("", "validatedby:", oicm.getActor(), " @", DateUtil.asMemo(oicm.getSystDate())),
                     10,
                     480);
@@ -186,8 +189,94 @@ public class IncomeComplianceMutasiService {
         return rsp;
     }
 
-    public IncomeComplianceMutasi uncomply() {
-        return null;
+    @Transactional
+    public Map<String, Object> uncomply(IncomeComplianceMutasi in, String memo, String actor) {
+        Map<String, Object> rsp = new HashMap<>();
+
+        if (in.getId() != null) {
+            if (in.getIncomeId() != null) {
+                Income oi = repoI.findOne(in.getIncomeId());
+                if (oi.getMutasiId() != null) {
+                    Mutasi om = repoM.findOne(oi.getMutasiId());
+                    om.setSystMemo("uncomplied,caused " + memo + ",by=" + actor);
+                    om.setStage(Stage.MUTASI._UNPAIRED);
+                    om.setIncomeId(Stage._NULLIFIED);
+                    repoM.save(om);
+
+                    oi.setSystMemo("uncomplied,caused " + memo + ",by=" + actor);
+                    oi.setStage(Stage.INCOME._UNPAIRED);
+                    oi.setMutasiId(Stage._NULLIFIED);
+                    repoI.save(oi);
+
+                    in.setMemo("uncomplied,caused " + memo + ",by=" + actor);
+                    in.setStage(Stage.INCOMECOMPLIANCEMUTASI._UNCOMPLIED);
+                    in.setMutasiId(Stage._NULLIFIED);
+                    in.setIncomeId(Stage._NULLIFIED);
+                    repoICM.save(in);
+                    
+                    rsp.put("msg", "uncomply successfully executed");
+                    rsp.put("code", HttpStatus.OK);
+                } else {
+                    rsp.put("msg", "Mutasi is not exist");
+                    rsp.put("code", HttpStatus.NOT_FOUND);
+                }
+            } else {
+                rsp.put("msg", "Income is not exist");
+                rsp.put("code", HttpStatus.NOT_FOUND);
+            }
+
+        } else {
+            rsp.put("msg", "IncomeComplianceMutasi is not exist");
+            rsp.put("code", HttpStatus.NOT_FOUND);
+        }
+        return rsp;
+    }
+
+    @Transactional
+    public Map uncomplyImg(Long in, String memo, String actor) throws IOException {
+
+        Map<String, Object> rsp = new HashMap<>();
+        IncomeComplianceMutasi oicm = repoICM.findOne(in);
+        if (!StringUtil.isNullOrBlank(oicm.getPrintFSL()) && FileUtil.isExist(FileUtil.getAbsDir(oicm.getPrintFSL()))) {
+
+            //Get img comply
+            String baseLImg = FileUtil.getAbsDir(oicm.getPrintFSL());
+            System.out.println("baseLImg=" + baseLImg);
+            BufferedImage baseImg = ImageIO.read(new File(baseLImg));
+
+            Graphics g = baseImg.getGraphics();
+            g.setFont(g.getFont().deriveFont(16f));
+            g.setColor(Color.RED);
+
+            int wrapLength = 70;
+            String[] temps = StringUtil.textWrap(wrapLength, StringUtil.concats(VERIFIER_DELIMITER, memo + " by " + actor + " @ " + DateUtil.getMemoTNow()));
+
+            int x = 10, y = 420;
+            for (String t : temps) {
+                g.drawString(t, x, y);
+                y += 20;
+            }
+
+            BufferedImage idtfr00Img = ImageIO.read(new File(VOID_SCHEME_SRC));
+            //default // g.drawImage(idtfr00Img, 170, 227, 160, 47, null);
+            g.drawImage(idtfr00Img, 0, 227, 500, 72, null);
+            //uncomply sample // g.drawImage(image3, 0, 297, 500, 22, null);
+            g.dispose();
+
+            String flsExt = FileUtil.getFileExtension(oicm.getPrintFSL());
+            System.out.println("comply=" + oicm.getPrintFSL());
+            ImageIO.write(baseImg, flsExt, new File(FileUtil.getAbsDir(oicm.getPrintFSL())));
+
+            repoICM.save(oicm);
+            rsp.put("fsl", oicm.getPrintFSL());
+            rsp.put("imgPblcURI", ApiController.PREFIX_PUBLIC + "/undh/incomecmutasi/img?id=" + StringUtil.asURL(ChiperUtil.encrypt(String.valueOf(in))) + "&actkey=" + StringUtil.asURL(ChiperUtil.encrypt(DateUtil.getChiperKey())));
+            System.out.println("complyimg=" + oicm.getPrintFSL());
+
+        } else {
+            rsp.put("msg", ".img IncomeComplianceMutasi is not exist!");
+            rsp.put("code", HttpStatus.NOT_FOUND);
+        }
+        return rsp;
     }
 
 }
