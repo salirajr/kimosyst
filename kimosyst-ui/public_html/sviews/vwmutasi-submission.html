@@ -7,7 +7,7 @@
                 <input type="text" ng-model="data.submissionId" ng-readonly="data.locationSearchId"  placeholder="*" style="width: 100px;"
                        class="form-control rightalign" />
             </div>
-            <button ng-show="data.locationSearchId !== '' && data.locationSearchId !== undefined && !data.refId" class="btn btn-danger" ng-click="resetVwRqParam()"><i class="fa fa-trash"></i></button>
+            <button ng-show="data.locationSearchId !== '' && data.locationSearchId !== undefined && !data.refId" class="btn btn-danger" ng-click="deleteSubmissioin()"><i class="fa fa-trash"></i></button>
 
             <div class="form-group " ng-hide="data.refId">
                 <ui-select ng-model="account.selected"  theme="bootstrap" >
@@ -71,13 +71,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="dt in vw.mutasi">
-<td class="text-right">{{dt.mutasiTgl}}</td>
-                                    
+                                <tr ng-repeat="dt in vw.mutasi" ng-class="(dt.mutasiIncomeId === null)?'':'text-navy'">
+                                    <td class="text-right">{{dt.mutasiTgl}}</td>
+
                                     <td class="text-left">{{dt.mutasiRekAccount}}</td>
                                     <td class="text-right">{{dt.mutasiKredit}}</td>
                                     <td class="text-left">{{dt.mutasiMemmo}}</td>
-                                    <td class="text-navy  text-left">{{dt.mutasiSystDate|date:main.formatTDate}}</td>
+                                    <td class=" text-left">{{dt.mutasiSystDate|date:main.formatTDate}}</td>
                                     <td class="text-left">{{dt.mutasiSbssnId}}</td>
                                     <td class="text-right">{{main.parseMutasiStage(dt.mutasiStage)}}</td>
                                     <td class="text-left">{{main.NVL(dt.mutasiIncomeId, '~')}}</td>

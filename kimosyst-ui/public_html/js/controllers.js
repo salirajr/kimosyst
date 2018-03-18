@@ -409,7 +409,7 @@ function vwMutasiIncomeCompliance(CONST, Ivkr, Dalg, $scope, toaster, $log) {
     $scope.vw.income = [];
     $scope.retrieveVWIncome = function () {
         Ivkr.get(
-                "/ksyt/income/vw/" + createVwRqParam(),
+                "/ksyt/income/vw/" + createVwRqParam() + "&gtStage=5.0&ltStage=9.0",
                 function (rsp) {
                     $scope.vw.income = rsp.body;
                     toaster.success("Complied data income loaded successfully");
@@ -427,7 +427,7 @@ function vwMutasiSubmission(CONST, Ivkr, Dalg, $scope, $location, toaster, $log)
     $scope.data = {};
     $scope.data.dateFrom = moment().startOf('month');
     $scope.data.dateTo = new moment();
-    
+
     $scope.data.locationSearchId = $location.search().id;
     $scope.data.submissionId = $location.search().id;
 
@@ -506,6 +506,15 @@ function vwMutasiSubmission(CONST, Ivkr, Dalg, $scope, $location, toaster, $log)
             $scope.data.isChecked = false;
             $scope.retrieveVWMutasi();
         });
+
+    };
+
+    $scope.deleteSubmissioin = function () {
+        Dalg.delete("Are you sure want to delete submission [" + $scope.data.submissionId + "] ?",
+                "If you continue this action, current inputed data will erased from system, and you won't be able to retrieve it in future",
+                function (out) {
+
+                });
 
     };
 
@@ -1261,12 +1270,13 @@ function mutasiInputRawsCtrl(Ivkr, $rootScope, $scope, $http, $log, toaster) {
                     $scope.state.uploadMutasi = true;
                     $scope.state.errMsg = undefined;
                 },
-                function (err) {
-                    $log.info("err!");
+                function (err, code) {
+                    $log.info("err!" + code);
                     $log.info(err);
                     $scope.state.uploadMutasi = false;
                     $scope.state.errMsg = err.header.status + ":" + err.header.code + " " + err.header.info;
                     toaster.warning("Upload " + $scope.data.submission.fileName + " failed");
+
                 }
 
         );
@@ -1402,7 +1412,8 @@ function mutasiInputRawsCtrl(Ivkr, $rootScope, $scope, $http, $log, toaster) {
                         }
                     });
                 },
-                function (err) {
+                function (err, code) {
+                    $log.info("err!" + code);
                     $log.info(err);
                     toaster.warning("Submission failure of " + $scope.data.submission.fileName);
                     $scope.state.errMsg = err.header.status + "[" + err.header.code + "]: " + err.header.info;
@@ -1413,7 +1424,7 @@ function mutasiInputRawsCtrl(Ivkr, $rootScope, $scope, $http, $log, toaster) {
 }
 
 //@007 #CURR
-function mutasiInputIncomeCtrl(Ivkr, $rootScope, $scope, $http, $log, toaster, SweetAlert) {
+function mutasiInputIncomeCtrl(Ivkr, $rootScope, $state, $scope, $log, toaster, SweetAlert) {
 
     $scope.today = new Date();
     $scope.state = {};
@@ -1423,9 +1434,12 @@ function mutasiInputIncomeCtrl(Ivkr, $rootScope, $scope, $http, $log, toaster, S
     $scope.data = {};
     $scope.data.date = new moment();
     $scope.data.time = new moment().format('HH:MM');
+
+
     $scope.normDate = function (vdate) {
         return vdate.format('YYYY-MM-DD');
     };
+
     $scope.account = {};
     $scope.lsAccount = [];
     $scope.getRefAccount = function () {
@@ -1877,6 +1891,12 @@ function mutasiInputIncomeCtrl(Ivkr, $rootScope, $scope, $http, $log, toaster, S
         reader.readAsDataURL(file);
     };
     angular.element(document.querySelector('#fileInputs')).on('change', handleFileSelector);
+
+    $scope.reinit = function () {
+        $state.reload();
+    };
+
+
 }
 
 

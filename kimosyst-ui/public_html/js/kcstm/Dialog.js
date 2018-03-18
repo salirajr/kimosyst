@@ -35,14 +35,14 @@
 
         }
 
-        function askConfirm(quest, fnConfirmed) {
+        function askConfirm(quest, detail, fnConfirmed) {
 
-            var input = {"quest": quest, "askReason": false, "buttonType":"DismissProceed"};
+            var input = {"quest": quest, "detail": detail, "askReason": false, "buttonType": "DismissProceed"};
             dialog(input, fnConfirmed, function () {});
         }
 
-        function askDeletion(quest, fnConfirmed, fnDismissed) {
-            var input = {"quest": quest, "askReason": true, "buttonType":"DeleteCancel"};
+        function askDeletion(quest, detail, fnConfirmed, fnDismissed) {
+            var input = {"quest": quest, "detail": detail, "askReason": true, "buttonType": "DeleteCancel"};
             dialog(input, fnConfirmed, fnDismissed);
         }
     }

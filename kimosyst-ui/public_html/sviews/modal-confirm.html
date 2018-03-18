@@ -3,10 +3,12 @@
         <div>
             <h2><small class="font-bold">{{ activeUser.uName}},</small><br> {{in.quest}}</h2>
         </div>
+        <div class="form-group" style="color: tomato;">
+             {{in.detail}}
+        </div>
         <div class="form-group m-none" ng-show="in.askReason">
             <span class="muted"><i>Provided reason:</i></span> <textarea cols="4" rows="5" ng-model="out.reason" class="form-control m-b-none"></textarea>
         </div>
-
     </div>
     <div class="modal-footer m-none p-sm" ng-show=" in.buttonType === 'DismissProceed'">
         <button type="button" class="btn btn-warning" ng-click="dismised()">Dismiss</button>
@@ -14,6 +16,6 @@
     </div>
     <div class="modal-footer m-none p-sm" ng-show=" in.buttonType === 'DeleteCancel'">
         <button type="button" class="btn btn-primary" ng-click="dismised()">Cancel</button>
-        <button type="button" class="btn btn-danger" ng-click="confirmed()">Delete</button>
+        <button type="button" class="btn btn-danger" ng-show="out.reason !== undefined" ng-click="confirmed()">Delete</button>
     </div>
 </div>
