@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Sun Mar 18 09:37:30 WIB 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0162-36f8-1311-000010481ff8 
+Sun Mar 25 12:23:26 WIB 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0162-5b9c-81a9-00001116b390 
 on database directory /home/salirajr/Projects/kimosyst/derby/dbkimo with class loader sun.misc.Launcher$AppClassLoader@659e0bfd 
 Loaded from file:/home/salirajr/.m2/repository/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
 java.vendor=Oracle Corporation

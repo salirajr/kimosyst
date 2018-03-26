@@ -3,7 +3,9 @@ package com.sjr.kimosyst.rest.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sjr.kimosyst.model.Mutasi;
 import com.sjr.kimosyst.model.util.BaseModel;
+import com.sjr.kimosyst.model.util.Stage;
 import com.sjr.kimosyst.rest.api.util.Payload;
+import com.sjr.kimosyst.security.JwtFilter;
 import com.sjr.kimosyst.service.MutasiService;
 import com.sjr.kimosyst.util.ChiperUtil;
 import com.sjr.kimosyst.util.DateUtil;
@@ -11,6 +13,8 @@ import com.sjr.kimosyst.util.StringUtil;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -71,7 +75,32 @@ public class MutasiController {
         rsp.body = mtsiService.repo().findOne(id);
         return rsp;
     }
-    
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@PathVariable("id") Long id,
+            @RequestParam(name = "reason", required = true) String reason,
+            HttpServletRequest request)
+            throws ServletException {
+        Payload.Response rsp = null;
+        Map map = new HashMap();
+        Mutasi mtsi = mtsiService.repo().findOne(id);
+        System.out.println(mtsi);
+
+        if (mtsi.getStage() == Stage.MUTASI._NEW) {
+            rsp = new Payload.Response(Mutasi.TABLE_NAME, Payload.ResponseStatus._00);
+            mtsi.setStage(Stage.MUTASI._DELETED);
+            mtsi.addSystMemo("Deleted by [" + request.getHeader(JwtFilter.AUTHORIZATION) + "], reason=" + reason);
+            map.put("info", "Mutasi[" + id + "] has been successfully deleted.");
+            return new ResponseEntity(rsp, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            rsp = new Payload.BizzErrResponse(Mutasi.TABLE_NAME, "UNPROCESSABLE_ENTITY");
+            map.put("info", "Mutasi[" + id + "] is on " + mtsi.getStage() + " stage instead of _NEW[" + Stage.MUTASI._NEW + "].");
+            rsp.body = map;
+            return new ResponseEntity(rsp, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+    }
+
     @RequestMapping(value = "/file-access/{id}", method = RequestMethod.GET)
     public Payload.Response generate(@PathVariable("id") Long id, HttpServletResponse response)
             throws ServletException, IOException {

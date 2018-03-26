@@ -78,11 +78,12 @@ public class Mutasi implements Serializable {
     @Column(nullable = false)
     private Timestamp systDate;
 
-    private final int SYSTMEMO_LEN = 300;
+    private static final int SYSTMEMO_LEN = 300;
     @Column(nullable = true, length = SYSTMEMO_LEN)
     private String systMemo;
 
     public void addSystMemo(String text) {
+        this.systDate = DateUtil.getTNow();
         if (systMemo == null) {
             this.systMemo = text;
         } else {
