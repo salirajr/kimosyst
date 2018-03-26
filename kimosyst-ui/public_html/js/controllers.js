@@ -53,29 +53,35 @@ function MainCtrl(CONST) {
     };
 
     this.parseComplianceStage = function (stage) {
-        switch (stage) {
+        if (1 <= stage && stage < 2)
+            return "UnCOMPLIed";
+        else if (9 <= stage && stage < 10)
+            return "PAIRed";
 
-            case 9.9:
-                return "PAIRED";
-            case 0 :
-                return "UNSTAGE";
-        }
     };
     this.parseMutasiStage = function (stage) {
-        switch (stage) {
-            case 9.9:
-                return "IDTF-ED";
-            case 0 :
-                return "REQ-IDTF";
-        }
+        if (1 <= stage && stage < 2)
+            return "CORRUPT";
+        else if (2 <= stage && stage < 3)
+            return "DEL";
+        else if (5 <= stage && stage < 6)
+            return "ReqIDTF";
+        else if (6 <= stage && stage < 7)
+            return "UnPAIRed";
+        else if (9 <= stage && stage < 10)
+            return "IDTFed";
     };
     this.parseIncomeStage = function (stage) {
-        switch (stage) {
-            case 9.9:
-                return "VRFI-ED";
-            case 0 :
-                return "RQR-VRFI";
-        }
+        if (1 <= stage && stage < 2)
+            return "CORRUPT";
+        else if (2 <= stage && stage < 3)
+            return "DEL";
+        else if (5 <= stage && stage < 6)
+            return "ReqVRFY";
+        else if (6 <= stage && stage < 7)
+            return "UnPAIRed";
+        else if (9 <= stage && stage < 10)
+            return "VRFYed";
     };
 }
 ;
@@ -515,7 +521,6 @@ function vwMutasiSubmission(CONST, Ivkr, Dalg, $scope, $location, toaster, $log)
                 function (out) {
 
                 });
-
     };
 
     $scope.vw = {};
@@ -532,6 +537,23 @@ function vwMutasiSubmission(CONST, Ivkr, Dalg, $scope, $location, toaster, $log)
             $log.info(err);
         }
         );
+    };
+
+    $scope.deleteMutasi = function () {
+        Dalg.delete("Are you sure want to delete mutasi [" + $scope.data.refId + "] ?",
+                "This mutasi will not appear in compliance income.",
+                function (out) {
+                    $log.info(out);
+                    Ivkr.delete(
+                            "/ksyt/mutasi/" + $scope.data.refId + "?reason=" + out.reason,
+                            function (rsp) {
+                                toaster.success(rsp.body.content.info);
+                                $log.info(rsp);
+                            }, function (err) {
+                        $log.info(err);
+                    }
+                    );
+                });
     };
 }
 
@@ -1355,7 +1377,7 @@ function mutasiInputRawsCtrl(Ivkr, $rootScope, $scope, $http, $log, toaster) {
                     "debit": nmmn($scope.temp.lmutasi.content[i].Debet),
                     "rekAccount": getNum($scope.temp.lmutasi.headers.NomorRekening),
                     "memo": $scope.temp.lmutasi.content[i].KeteranganTransaksi,
-                    "stage": 0.0,
+                    "stage": 5.0,
                     "actor": $rootScope.activeUser.uName,
                     "systDate": $scope.data.submission.submitSystDate,
                     "systMemo": "@" + i + "|",
@@ -1623,7 +1645,7 @@ function mutasiInputIncomeCtrl(Ivkr, $rootScope, $state, $scope, $log, toaster, 
             "bank": $scope.bank.selected.text,
             "noteType": $scope.noteType.selected.text,
             "type": $scope.incomeType.selected.text,
-            "stage": 0.0,
+            "stage": 5.0,
             "actor": $rootScope.activeUser.uName,
             "systDate": new Date(),
             "systMemo": "Kimosyst-Submission|",

@@ -145,7 +145,7 @@
             if (!Auth.isLoggedIn()) {
                 $state.go("login");
             } else {
-                $http.get(uri).success(function (rsp) {
+                $http.delete(uri).success(function (rsp) {
                     $rootScope.activeUser.requestLock = false;
                     fnCBack(rsp);
                 }).error(function (err, status) {

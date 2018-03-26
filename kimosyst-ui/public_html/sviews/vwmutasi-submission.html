@@ -30,8 +30,8 @@
                 <input type="datetime" class="form-control rightalign" date-time ng-model="data.dateTo" readonly="true" style="background-color:  white;  width: 150px;" view="date" auto-close="true" min-view="hours" format="YYYY-MM-DD HH:mm" />
             </div>
 
-            <button ng-show="data.isChecked" class="btn btn-danger" ng-click="resetVwRqParam()"><i class="fa fa-trash"></i></button>
-            <button ng-show="data.isChecked" class="btn btn-info" ng-click="cancelCheck()"><i class="fa fa-times"></i></button>
+            <button title="Delete selected mutasi(#M)" ng-show="data.isChecked" class="btn btn-danger" ng-click="deleteMutasi()"><i class="fa fa-trash"></i></button>
+            <button title="Clear mutasi selection" ng-show="data.isChecked" class="btn btn-info" ng-click="cancelCheck()"><i class="fa fa-times"></i></button>
 
             <div class="input-group">
                 <span class="input-group-addon bg-muted">M#</span>
@@ -39,6 +39,7 @@
                        class="form-control rightalign" />
             </div>
 
+            <a ng-hide="data.refId" class="btn btn-default btn-outline" href="/#/vwmutasi/findsubmission"><i class="fa fa-arrow-left"></i></a>
             <button ng-hide="data.refId" class="btn btn-warning btn-outline" ng-click="resetVwRqParam()"><i class="fa fa-eraser"></i></button>
             <button ng-hide="data.refId" class="btn btn-primary" ng-click="retrieveVWMutasi()"><i class="fa fa-search"></i></button>
         </form>
